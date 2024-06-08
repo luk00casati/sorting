@@ -1,0 +1,1 @@
+gcc main.c sort.c -Wall -Wextra -O2 -Wno-undef -pedantic -lraylib
