@@ -1,20 +1,20 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-void stalinSort(int* array, int arraysize) {
-    int lastValid = array[0];
-    int index = 1;
-    
-    for (int i = 1; i < arraysize; i++) {
-        if (array[i] < lastValid) {
-            array[i] = -1;
-        } else {
-            lastValid = array[i];
-            array[index] = array[i];
-            index++;
-            array[i] = -1;
-        }
+void swap(int *a, int *b) {
+  int temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+void selectionsort(int *array, int arraysize) {
+  for (int i = 0; i < arraysize; i++) {
+    for (int j = 0; j < arraysize; j++) {
+      if (array[j] == i) {
+        swap(&array[j], &array[i]);
+      }
     }
+  }
 }
 
 int *populate_crescente(int size) {
@@ -37,16 +37,17 @@ void shuffle(int *array, size_t n) {
   }
 }
 
-int main(){
+int main() {
   const int size = 10;
-  int * array = populate_crescente(size);
+  int *array = populate_crescente(size);
   shuffle(array, size);
-  for (int i = 0; i < size; i++){
+  for (int i = 0; i < size; i++) {
     printf("%d ", array[i]);
   }
   printf("\n\n");
-  stalinSort(array, size);
-    for (int i = 0; i < size; i++){
+  // stalinSort(array, size);
+  selectionsort(array, size);
+  for (int i = 0; i < size; i++) {
     printf("%d ", array[i]);
   }
   printf("\n");

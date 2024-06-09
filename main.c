@@ -16,9 +16,16 @@ int main(void) {
   // select menu
   int selected = 0;
   int start = 0;
-  enum e_sorting_alg { quicksort, insertionsort, stalinsort, bogosort } sorter;
-  const char *name_sorter[] = {"quicksort", "insertionsort", "stalinsort",
-                               "bogosort"};
+  enum e_sorting_alg {
+    quicksort,
+    insertionsort,
+    selectionsort,
+    mergesort,
+    stalinsort,
+    bogosort
+  } sorter;
+  const char *name_sorter[] = {"quicksort", "insertionsort", "selectionsort", "mergesort",
+                               "stalinsort", "bogosort"};
   int end = sizeof(name_sorter) / sizeof(name_sorter[0]);
 
   InitWindow(screenWidth, screenHeight, "sorting");
@@ -50,6 +57,12 @@ int main(void) {
         break;
       case insertionsort:
         InsertionSortStepIterative(array, arraysize);
+        break;
+      case selectionsort:
+        SelectionSortStepIterative(array, arraysize);
+        break;
+      case mergesort:
+        MergeSortStepIterative(array, arraysize, 0, arraysize - 1);
         break;
       case stalinsort:
         StalinSortStepIterative(array, arraysize);
