@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 
 int *populate_crescente(int size) {
@@ -16,35 +17,26 @@ void reset_crescente(int *arr, int size) {
     arr[i] = i;
   }
 }
-void shuffle(int *array, size_t n) {
-  if (n > 1) {
-    size_t i;
-    for (i = 0; i < n - 1; i++) {
-      size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
-      int t = array[j];
-      array[j] = array[i];
-      array[i] = t;
-    }
-  }
-}
-bool arraySorted(int *arr, int n) {
-  // Array has one or no element
-  if (n == 0 || n == 1)
-    return false;
-
-  for (int i = 1; i < n; i++) {
-    // Unsorted pair found
-    if (arr[i - 1] > arr[i])
-      return true;
-  }
-
-  // No unsorted pair found
-  return false;
-}
 void swap(int *a, int *b) {
   int temp = *a;
   *a = *b;
   *b = temp;
+}
+void shuffle(int *arr, int n) {
+  srand(time(NULL));
+
+  for (int i = n - 1; i > 0; i--) {
+    int j = rand() % (i + 1);
+    swap(&arr[i], &arr[j]);
+  }
+}
+bool isarraysorted(int *arr, int n) {
+  for (int i = 0; i < n - 1; i++) {
+    if (arr[i] > arr[i + 1]) {
+      return false;
+    }
+  }
+  return true;
 }
 int partition(int arr[], int low, int high) {
 
@@ -85,7 +77,7 @@ void quickSort(int arr[], int low, int high) {
     quickSort(arr, partitionIndex + 1, high);
   }
 }
-void quickSortStepIterative(int *arr, int arrsize, int low, int high) {
+void QuickSortStepIterative(int *arr, int arrsize, int low, int high) {
   if (low < high) {
     if (WindowShouldClose()) {
       shuffle(arr, arrsize);
@@ -102,10 +94,14 @@ void quickSortStepIterative(int *arr, int arrsize, int low, int high) {
     }
     EndDrawing();
 
-    quickSortStepIterative(arr, arrsize, low, partitionIndex - 1);
-    quickSortStepIterative(arr, arrsize, partitionIndex + 1, high);
+    if (isarraysorted(arr, arrsize)) {
+      sleep(1);
+      return;
+    }
+
+    QuickSortStepIterative(arr, arrsize, low, partitionIndex - 1);
+    QuickSortStepIterative(arr, arrsize, partitionIndex + 1, high);
   }
-  sleep(1);
 }
 void insertionsort(int *array, int arraysize) {
   int i, key, j;
@@ -123,7 +119,7 @@ void insertionsort(int *array, int arraysize) {
     array[j + 1] = key;
   }
 }
-void insertionSortStepIterative(int *array, int arraysize) {
+void InsertionSortStepIterative(int *array, int arraysize) {
   int i, key, j;
   for (i = 1; i < arraysize; i++) {
     key = array[i];
@@ -162,7 +158,7 @@ void stalinsort(int *array, int arraysize) {
     }
   }
 }
-void stalinSortStepIterative(int *array, int arraysize) {
+void StalinSortStepIterative(int *array, int arraysize) {
   int lastValid = array[0];
   int index = 1;
 
@@ -196,5 +192,32 @@ void stalinSortStepIterative(int *array, int arraysize) {
     }
   }
   reset_crescente(array, arraysize);
+  sleep(1);
+}
+void bogosort(int *array, int arraysize) {
+  while (!isarraysorted(array, arraysize)) {
+    shuffle(array, arraysize);
+  }
+}
+void BogoSortStepIterative(int *array, int arraysize) {
+  while (!isarraysorted(array, arraysize)) {
+    if (WindowShouldClose()) {
+      return;
+    }
+    shuffle(array, arraysize);
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+
+    for (int j = 0; j < arraysize; j++) {
+      if (array[j] != -1) {
+        int rectHeight = (array[j] * GetScreenHeight()) / arraysize;
+        DrawRectangle(j * (GetScreenWidth() / arraysize),
+                      GetScreenHeight() - rectHeight,
+                      GetScreenWidth() / arraysize, rectHeight, RED);
+      }
+    }
+
+    EndDrawing();
+  }
   sleep(1);
 }

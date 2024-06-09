@@ -1,8 +1,7 @@
 #include "sort.h"
-#include <asm-generic/errno.h>
 #include <raylib.h>
 #include <stdbool.h>
-//#include <stdio.h>
+// #include <stdio.h>
 #include <stdlib.h>
 
 int main(void) {
@@ -17,7 +16,9 @@ int main(void) {
   // select menu
   int selected = 0;
   int start = 0;
-  const char *name_sorter[] = {"quicksort", "insertionsort", "stalinsort"};
+  enum e_sorting_alg { quicksort, insertionsort, stalinsort, bogosort } sorter;
+  const char *name_sorter[] = {"quicksort", "insertionsort", "stalinsort",
+                               "bogosort"};
   int end = sizeof(name_sorter) / sizeof(name_sorter[0]);
 
   InitWindow(screenWidth, screenHeight, "sorting");
@@ -25,37 +26,42 @@ int main(void) {
   SetTargetFPS(60);
   // quickSortStepIterative(array, arraysize, 0, arraysize - 1);
   while (!WindowShouldClose()) {
-    if (!arraySorted(array, arraysize)){
+    if (isarraysorted(array, arraysize)) {
       shuffle(array, arraysize);
     }
-    
-      if(IsKeyReleased(KEY_DOWN)){
-        if (selected < end - 1){
+
+    if (IsKeyReleased(KEY_DOWN)) {
+      if (selected < end - 1) {
         selected++;
       }
     }
-   
-      if(IsKeyReleased(KEY_UP)){ 
-        if (selected > start){
+
+    if (IsKeyReleased(KEY_UP)) {
+      if (selected > start) {
         selected--;
       }
     }
-    if (IsKeyReleased(KEY_ENTER)){
-    switch (selected) {
-        case 0:
-        quickSortStepIterative(array, arraysize, 0, arraysize - 1);
+
+    if (IsKeyReleased(KEY_ENTER)) {
+      sorter = selected;
+      switch (sorter) {
+      case quicksort:
+        QuickSortStepIterative(array, arraysize, 0, arraysize - 1);
         break;
-        case 1:
-        insertionSortStepIterative(array, arraysize);
+      case insertionsort:
+        InsertionSortStepIterative(array, arraysize);
         break;
-        case 2:
-        stalinSortStepIterative(array, arraysize);
+      case stalinsort:
+        StalinSortStepIterative(array, arraysize);
         break;
-        default:
+      case bogosort:
+        BogoSortStepIterative(array, arraysize);
         break;
+      default:
+        break;
+      }
+      selected = 0;
     }
-    selected = 0;
-}
     BeginDrawing();
 
     ClearBackground(RAYWHITE);
