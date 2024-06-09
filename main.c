@@ -4,6 +4,8 @@
 // #include <stdio.h>
 #include <stdlib.h>
 
+#define ARRSIZE(x) sizeof(x) / sizeof(x[0])
+
 int main(void) {
   const int screenWidth = 800;
   const int screenHeight = 450;
@@ -21,12 +23,14 @@ int main(void) {
     insertionsort,
     selectionsort,
     mergesort,
+    radixsort,
     stalinsort,
     bogosort
   } sorter;
-  const char *name_sorter[] = {"quicksort", "insertionsort", "selectionsort", "mergesort",
-                               "stalinsort", "bogosort"};
-  int end = sizeof(name_sorter) / sizeof(name_sorter[0]);
+  const char *name_sorter[] = {"quicksort", "insertionsort", "selectionsort",
+                               "mergesort", "radixsort",     "stalinsort",
+                               "bogosort"};
+  int end = ARRSIZE(name_sorter);
 
   InitWindow(screenWidth, screenHeight, "sorting");
 
@@ -63,6 +67,9 @@ int main(void) {
         break;
       case mergesort:
         MergeSortStepIterative(array, arraysize, 0, arraysize - 1);
+        break;
+      case radixsort:
+        RadixSortStepIterative(array, arraysize);
         break;
       case stalinsort:
         StalinSortStepIterative(array, arraysize);
