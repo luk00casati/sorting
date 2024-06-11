@@ -6,6 +6,18 @@
 
 #define ARRSIZE(x) sizeof(x) / sizeof(x[0])
 
+#define FOREACH_SORTER_ALG(SORTER_ALG)                                         \
+  SORTER_ALG(quicksort)                                                        \
+  SORTER_ALG(insertionsort)                                                    \
+  SORTER_ALG(selectionsort)                                                    \
+  SORTER_ALG(mergesort)                                                        \
+  SORTER_ALG(radixsort)                                                        \
+  SORTER_ALG(stalinsort)                                                       \
+  SORTER_ALG(bogosort)
+
+#define GENERATE_ENUM(ENUM) ENUM,
+#define GENERATE_STRING(STRING) #STRING,
+
 int main(void) {
   const int screenWidth = 800;
   const int screenHeight = 450;
@@ -18,19 +30,10 @@ int main(void) {
   // select menu
   int selected = 0;
   int start = 0;
-  enum e_sorting_alg {
-    quicksort,
-    insertionsort,
-    selectionsort,
-    mergesort,
-    radixsort,
-    stalinsort,
-    bogosort
-  } sorter;
-  const char *name_sorter[] = {"quicksort", "insertionsort", "selectionsort",
-                               "mergesort", "radixsort",     "stalinsort",
-                               "bogosort"};
-  int end = ARRSIZE(name_sorter);
+  enum SORTER_ENUM { FOREACH_SORTER_ALG(GENERATE_ENUM) };
+  static const char *SORTER_STRING[] = {FOREACH_SORTER_ALG(GENERATE_STRING)};
+  int end = ARRSIZE(SORTER_STRING);
+  enum SORTER_ENUM sorter;
 
   InitWindow(screenWidth, screenHeight, "sorting");
 
@@ -88,10 +91,10 @@ int main(void) {
 
     for (int i = start; i < end; i++) {
       if (i == selected) {
-        DrawText(name_sorter[i], text_size, text_size * i, text_size, RED);
+        DrawText(SORTER_STRING[i], text_size, text_size * i, text_size, RED);
       }
       if (i != selected) {
-        DrawText(name_sorter[i], text_size, text_size * i, text_size, BLACK);
+        DrawText(SORTER_STRING[i], text_size, text_size * i, text_size, BLACK);
       }
     }
     EndDrawing();

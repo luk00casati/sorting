@@ -246,6 +246,7 @@ void mergesort(int arr[], int l, int r) {
   }
 }
 void MergeSortStepIterative(int *array, int arraysize, int l, int r) {
+  // merge dont break
   if (l < r) {
     int m = l + (r - l) / 2;
 
@@ -267,11 +268,6 @@ void MergeSortStepIterative(int *array, int arraysize, int l, int r) {
     }
 
     EndDrawing();
-
-    if (WindowShouldClose()) {
-      shuffle(array, arraysize);
-      return;
-    }
 
     if (isarraysorted(array, arraysize)) {
       sleep(1);
@@ -346,7 +342,7 @@ void RadixSortStepIterative(int *array, int arraysize) {
 
     EndDrawing();
 
-    //is fast
+    // is fast
     sleep(1);
 
     if (WindowShouldClose()) {
